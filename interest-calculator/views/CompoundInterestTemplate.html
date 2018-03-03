@@ -1,0 +1,69 @@
+<md-content class="md-padding">
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Compound Interest Calculator</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <form ng-model="simple" name="simpleInterestForm">
+                <md-input-container class="md-block principalInput" align="start">
+                    <input placeholder="Principal" type="number" name="principal" ng-model="simple.principal" min="1000" required  ng-change="inputFieldChanged()" />
+                    <div class="hint" ng-if="simpleInterestForm.principal.$valid || simpleInterestForm.principal.$error">in USD</div>
+                    <div ng-messages="simpleInterestForm.principal.$error" multiple md-auto-hide="false">
+                        <div ng-message="required">You've to define the principal</div>
+                        <div ng-message="min">Minimum value of principal should be greater than 1000$ USD</div>
+                        <div ng-message="simpleInterestForm.principal.$invalid">not valid</div>
+                    </div>
+                    <span class="md-input-message-animation" ng-show="simpleInterestForm.principal.$invalid">The input value is not valid</span>
+                </md-input-container>
+                <md-input-container class="md-block periodInput">
+                    <input placeholder="Time Period" type="number" name="period" ng-model="simple.period" min="1" max="10" ng-pattern="/^-?[0-9][^\.]*$/" required ng-change="inputFieldChanged()"/>
+                    <div class="hint" ng-if="simpleInterestForm.period.$valid || simpleInterestForm.period.$error">in years</div>
+                    <div ng-messages="simpleInterestForm.period.$error" multiple md-auto-hide="false">
+                        <div ng-message="required">You've to define the period</div>
+                        <div ng-message="pattern">Time period should be a whole year or more</div>
+                        <div ng-message="min">Minimum period is 1 year</div>
+                        <div ng-message="max">Maximum period is 10 years</div>
+                    </div>
+                    <span class="md-input-message-animation" ng-show="simpleInterestForm.period.$invalid">The input value is not valid</span>
+                </md-input-container>
+                <md-input-container class="md-block rateInput">
+                    <input placeholder="Rate of Interest" type="number" name="rate" ng-model="simple.rate" min="1" required ng-change="inputFieldChanged()"/>
+                    <div class="hint" ng-if="simpleInterestForm.principal.$valid || simpleInterestForm.rate.$error">in percentage %</div>
+
+                    <div ng-messages="simpleInterestForm.rate.$error" multiple md-auto-hide="false">
+                        <div ng-message="required">You've to define the rate</div>
+                        <div ng-message="min">Minimum rate should be 1% or more</div>
+                        <div ng-message="max">Maximum rate should be less than or equal 300%</div>
+                        <div ng-message="pattern">This field accept integers</div>
+                    </div>
+                    <span class="md-input-message-animation" ng-show="simpleInterestForm.rate.$invalid">The input value is not valid</span>
+                </md-input-container>
+                <md-button ng-disabled="!simpleInterestForm.$error || simpleInterestForm.$invalid" class="md-raised md-primary" ng-click="calculate(simple)">Calculate</md-button>
+            </form>
+            <h3 ng-if="results">Total amount in {{simple.period}} years = {{results | currency}}</h3>
+            <md-table-container ng-if="results">
+                <table md-table>
+                    <thead md-head>
+                        <tr md-row>
+                            <th md-column>
+                                <span>Year</span>
+                            </th>
+                            <th md-column>
+                                <span>Interest</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row ng-repeat="year in totalPerYear">
+                            <td md-cell>{{year.year}}</td>
+                            <td md-cell>{{year.value | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+        </md-card-content>
+    </md-card>
+
+</md-content>
